@@ -11,7 +11,7 @@ export default function AuthPage() {
     <main style={styles.main}>
       <AuthView
         pathname={pathname}
-        callbackURL="http://localhost:5173/dashboard"
+        callbackURL={`${window.location.origin}/dashboard`}
       />
 
       {/* Additional info below auth card */}

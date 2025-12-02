@@ -61,19 +61,19 @@ const styles: Record<string, React.CSSProperties> = {
   },
   poweredBy: {
     fontSize: '0.75rem',
-    color: 'rgba(113, 113, 122, 1)',
+    color: 'var(--muted-foreground)',
     margin: 0,
   },
   linkGreen: {
-    color: 'rgba(16, 185, 129, 1)',
+    color: 'oklch(0.696 0.17 162.48)',
     textDecoration: 'underline',
   },
   linkCyan: {
-    color: 'rgba(6, 182, 212, 1)',
+    color: 'oklch(0.715 0.143 215.221)',
     textDecoration: 'underline',
   },
   backLink: {
-    color: 'rgba(161, 161, 170, 1)',
+    color: 'var(--muted-foreground)',
     textDecoration: 'none',
     fontSize: '0.875rem',
   },

@@ -4,7 +4,7 @@ import {
   UserButton,
   AuthLoading,
 } from '@neondatabase/neon-auth-ui';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 
 export function Header() {
@@ -18,16 +18,35 @@ export function Header() {
 
       {/* Navigation */}
       <nav style={styles.nav}>
-        <Link to="/" style={styles.navLink}>
+        <NavLink
+          to="/"
+          end
+          style={({ isActive }) => ({
+            ...styles.navLink,
+            ...(isActive ? styles.navLinkActive : {}),
+          })}
+        >
           Home
-        </Link>
+        </NavLink>
         <SignedIn>
-          <Link to="/dashboard" style={styles.navLink}>
+          <NavLink
+            to="/dashboard"
+            style={({ isActive }) => ({
+              ...styles.navLink,
+              ...(isActive ? styles.navLinkActive : {}),
+            })}
+          >
             Dashboard
-          </Link>
-          <Link to="/account/settings" style={styles.navLink}>
+          </NavLink>
+          <NavLink
+            to="/account/settings"
+            style={({ isActive }) => ({
+              ...styles.navLink,
+              ...(isActive ? styles.navLinkActive : {}),
+            })}
+          >
             Settings
-          </Link>
+          </NavLink>
         </SignedIn>
       </nav>
 
@@ -66,8 +85,8 @@ const styles: Record<string, React.CSSProperties> = {
     top: 0,
     zIndex: 50,
     width: '100%',
-    borderBottom: '1px solid var(--border-color)',
-    backgroundColor: 'var(--bg-secondary)',
+    borderBottom: '1px solid var(--border)',
+    backgroundColor: 'color-mix(in oklch, var(--card) 90%, transparent)',
     backdropFilter: 'blur(12px)',
     display: 'flex',
     alignItems: 'center',
@@ -81,7 +100,7 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     gap: '0.5rem',
     textDecoration: 'none',
-    color: 'var(--text-primary)',
+    color: 'var(--foreground)',
   },
   logo: {
     fontSize: '1.5rem',
@@ -96,10 +115,14 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '1.5rem',
   },
   navLink: {
-    color: 'var(--text-secondary)',
+    color: 'var(--muted-foreground)',
     textDecoration: 'none',
     fontSize: '0.875rem',
     transition: 'color 0.2s',
+  },
+  navLinkActive: {
+    color: 'var(--primary)',
+    fontWeight: 600,
   },
   authSection: {
     display: 'flex',
@@ -110,14 +133,14 @@ const styles: Record<string, React.CSSProperties> = {
     height: '36px',
     width: '36px',
     borderRadius: '50%',
-    backgroundColor: 'var(--skeleton-bg)',
+    backgroundColor: 'var(--muted)',
     animation: 'pulse 2s infinite',
   },
   primaryButton: {
-    backgroundColor: 'var(--accent)',
-    color: 'white',
+    backgroundColor: 'var(--primary)',
+    color: 'var(--primary-foreground)',
     padding: '0.5rem 1rem',
-    borderRadius: '0.5rem',
+    borderRadius: 'var(--radius)',
     textDecoration: 'none',
     fontSize: '0.875rem',
     fontWeight: 500,

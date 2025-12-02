@@ -163,7 +163,7 @@ function AccountSkeleton() {
         style={{
           height: 32,
           width: 200,
-          backgroundColor: 'rgba(63,63,70,1)',
+          backgroundColor: 'var(--muted)',
           borderRadius: 8,
           marginBottom: 32,
         }}
@@ -175,7 +175,7 @@ function AccountSkeleton() {
             style={{
               height: 40,
               width: 100,
-              backgroundColor: 'rgba(63,63,70,1)',
+              backgroundColor: 'var(--muted)',
               borderRadius: 8,
             }}
           />
@@ -197,34 +197,34 @@ const styles: Record<string, React.CSSProperties> = {
   title: {
     fontSize: '1.875rem',
     fontWeight: 'bold',
-    color: 'white',
+    color: 'var(--foreground)',
     margin: 0,
     marginBottom: '0.5rem',
   },
   subtitle: {
-    color: 'rgba(161, 161, 170, 1)',
+    color: 'var(--muted-foreground)',
     margin: 0,
   },
   tabs: {
     display: 'flex',
     gap: '0.5rem',
     marginBottom: '2rem',
-    borderBottom: '1px solid rgba(39, 39, 42, 1)',
+    borderBottom: '1px solid var(--border)',
     paddingBottom: '1rem',
     flexWrap: 'wrap',
   },
   tab: {
     padding: '0.5rem 1rem',
-    borderRadius: '0.5rem',
-    color: 'rgba(161, 161, 170, 1)',
+    borderRadius: 'var(--radius)',
+    color: 'var(--muted-foreground)',
     textDecoration: 'none',
     fontSize: '0.875rem',
     fontWeight: 500,
   },
   tabActive: {
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-    color: 'rgba(16, 185, 129, 1)',
-    border: '1px solid rgba(16, 185, 129, 0.2)',
+    backgroundColor: 'color-mix(in oklch, var(--primary) 10%, transparent)',
+    color: 'var(--primary)',
+    border: '1px solid color-mix(in oklch, var(--primary) 20%, transparent)',
   },
   content: {},
   section: {
@@ -233,26 +233,26 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '1.5rem',
   },
   sectionCard: {
-    backgroundColor: 'rgba(24, 24, 27, 0.5)',
-    border: '1px solid rgba(39, 39, 42, 1)',
-    borderRadius: '0.75rem',
+    backgroundColor: 'var(--card)',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--radius)',
     padding: '1.5rem',
   },
   sectionTitle: {
-    color: 'white',
+    color: 'var(--card-foreground)',
     fontSize: '1.125rem',
     fontWeight: 600,
     margin: 0,
     marginBottom: '0.5rem',
   },
   sectionDesc: {
-    color: 'rgba(161, 161, 170, 1)',
+    color: 'var(--muted-foreground)',
     fontSize: '0.875rem',
     margin: 0,
     marginBottom: '1.5rem',
   },
   dangerCard: {
-    borderColor: 'rgba(127, 29, 29, 0.5)',
-    backgroundColor: 'rgba(127, 29, 29, 0.1)',
+    borderColor: 'color-mix(in oklch, var(--destructive) 50%, transparent)',
+    backgroundColor: 'color-mix(in oklch, var(--destructive) 10%, transparent)',
   },
 };

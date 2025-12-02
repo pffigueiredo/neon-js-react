@@ -35,8 +35,8 @@ function PageLoadingFallback() {
         style={{
           width: '40px',
           height: '40px',
-          border: '3px solid var(--skeleton-bg)',
-          borderTopColor: 'var(--accent)',
+          border: '3px solid var(--muted)',
+          borderTopColor: 'var(--primary)',
           borderRadius: '50%',
           animation: 'spin 0.8s linear infinite',
         }}

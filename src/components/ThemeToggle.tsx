@@ -57,11 +57,11 @@ export function ThemeToggle() {
       title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
       <div className="theme-toggle-track">
-        <SunIcon />
-        <MoonIcon />
-        <div className="theme-toggle-knob" />
+        <div className="theme-toggle-knob">
+          <SunIcon />
+          <MoonIcon />
+        </div>
       </div>
     </button>
   );
 }
-

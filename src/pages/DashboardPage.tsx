@@ -277,15 +277,15 @@ function DashboardContent() {
               style={{
                 ...styles.filterTab,
                 backgroundColor:
-                  filter === f ? 'rgba(16, 185, 129, 0.2)' : 'transparent',
+                  filter === f
+                    ? 'color-mix(in oklch, var(--primary) 20%, transparent)'
+                    : 'transparent',
                 borderColor:
                   filter === f
-                    ? 'rgba(16, 185, 129, 0.5)'
-                    : 'rgba(63, 63, 70, 1)',
+                    ? 'color-mix(in oklch, var(--primary) 50%, transparent)'
+                    : 'var(--border)',
                 color:
-                  filter === f
-                    ? 'rgba(16, 185, 129, 1)'
-                    : 'rgba(161, 161, 170, 1)',
+                  filter === f ? 'var(--primary)' : 'var(--muted-foreground)',
               }}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -385,8 +385,8 @@ function TodoItem({
       style={{
         ...styles.todoItem,
         backgroundColor: isHovered
-          ? 'rgba(39, 39, 42, 0.8)'
-          : 'rgba(39, 39, 42, 0.5)',
+          ? 'color-mix(in oklch, var(--muted) 80%, transparent)'
+          : 'color-mix(in oklch, var(--muted) 50%, transparent)',
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -395,12 +395,8 @@ function TodoItem({
         onClick={() => onToggle(todo)}
         style={{
           ...styles.checkbox,
-          backgroundColor: todo.completed
-            ? 'rgba(16, 185, 129, 1)'
-            : 'transparent',
-          borderColor: todo.completed
-            ? 'rgba(16, 185, 129, 1)'
-            : 'rgba(63, 63, 70, 1)',
+          backgroundColor: todo.completed ? 'var(--primary)' : 'transparent',
+          borderColor: todo.completed ? 'var(--primary)' : 'var(--border)',
         }}
       >
         {todo.completed && <span style={styles.checkmark}>✓</span>}
@@ -411,7 +407,9 @@ function TodoItem({
           style={{
             ...styles.todoText,
             textDecoration: todo.completed ? 'line-through' : 'none',
-            color: todo.completed ? 'rgba(113, 113, 122, 1)' : 'white',
+            color: todo.completed
+              ? 'var(--muted-foreground)'
+              : 'var(--foreground)',
           }}
         >
           {todo.title}
@@ -490,20 +488,20 @@ const styles: Record<string, React.CSSProperties> = {
   welcomeTitle: {
     fontSize: '1.25rem',
     fontWeight: 'bold',
-    color: 'var(--text-primary)',
+    color: 'var(--foreground)',
     margin: 0,
   },
   email: {
-    color: 'var(--text-secondary)',
+    color: 'var(--muted-foreground)',
     margin: 0,
     fontSize: '0.875rem',
   },
   settingsButton: {
-    backgroundColor: 'var(--bg-secondary)',
-    border: '1px solid var(--border-color)',
-    color: 'var(--text-primary)',
+    backgroundColor: 'var(--secondary)',
+    border: '1px solid var(--border)',
+    color: 'var(--secondary-foreground)',
     padding: '0.5rem 1rem',
-    borderRadius: '0.5rem',
+    borderRadius: 'var(--radius)',
     textDecoration: 'none',
     fontSize: '0.875rem',
   },
@@ -514,9 +512,9 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '2rem',
   },
   statCard: {
-    backgroundColor: 'var(--bg-secondary)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '0.75rem',
+    backgroundColor: 'var(--card)',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--radius)',
     padding: '1.25rem',
   },
   statHeader: {
@@ -526,20 +524,20 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '0.5rem',
   },
   statTitle: {
-    color: 'var(--text-secondary)',
+    color: 'var(--muted-foreground)',
     fontSize: '0.75rem',
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
   },
   statValue: {
-    color: 'var(--text-primary)',
+    color: 'var(--card-foreground)',
     fontSize: '1.75rem',
     fontWeight: 'bold',
     margin: 0,
   },
   todoCard: {
-    backgroundColor: 'var(--bg-secondary)',
-    border: '1px solid var(--border-color)',
+    backgroundColor: 'var(--card)',
+    border: '1px solid var(--border)',
     borderRadius: '1rem',
     padding: '1.5rem',
     marginBottom: '2rem',
@@ -551,7 +549,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '1.5rem',
   },
   todoTitle: {
-    color: 'var(--text-primary)',
+    color: 'var(--card-foreground)',
     fontSize: '1.25rem',
     fontWeight: 600,
     margin: 0,
@@ -559,7 +557,7 @@ const styles: Record<string, React.CSSProperties> = {
   clearButton: {
     background: 'none',
     border: 'none',
-    color: 'var(--text-secondary)',
+    color: 'var(--muted-foreground)',
     fontSize: '0.875rem',
     cursor: 'pointer',
     padding: '0.25rem 0.5rem',
@@ -572,20 +570,20 @@ const styles: Record<string, React.CSSProperties> = {
   },
   addInput: {
     flex: 1,
-    backgroundColor: 'var(--toggle-bg)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '0.5rem',
+    backgroundColor: 'var(--input)',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--radius)',
     padding: '0.75rem 1rem',
-    color: 'var(--text-primary)',
+    color: 'var(--foreground)',
     fontSize: '1rem',
     outline: 'none',
   },
   addButton: {
-    backgroundColor: 'var(--accent)',
+    backgroundColor: 'var(--primary)',
     border: 'none',
-    borderRadius: '0.5rem',
+    borderRadius: 'var(--radius)',
     padding: '0.75rem 1.5rem',
-    color: 'white',
+    color: 'var(--primary-foreground)',
     fontWeight: 600,
     fontSize: '0.875rem',
     cursor: 'pointer',
@@ -594,13 +592,13 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     gap: '0.5rem',
     marginBottom: '1rem',
-    borderBottom: '1px solid var(--border-color)',
+    borderBottom: '1px solid var(--border)',
     paddingBottom: '1rem',
   },
   filterTab: {
     padding: '0.5rem 1rem',
-    border: '1px solid var(--border-color)',
-    borderRadius: '0.5rem',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--radius)',
     background: 'transparent',
     cursor: 'pointer',
     fontSize: '0.875rem',
@@ -608,11 +606,12 @@ const styles: Record<string, React.CSSProperties> = {
     transition: 'all 0.2s',
   },
   errorMessage: {
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-    border: '1px solid rgba(239, 68, 68, 0.3)',
-    borderRadius: '0.5rem',
+    backgroundColor: 'color-mix(in oklch, var(--destructive) 10%, transparent)',
+    border:
+      '1px solid color-mix(in oklch, var(--destructive) 30%, transparent)',
+    borderRadius: 'var(--radius)',
     padding: '0.75rem 1rem',
-    color: 'rgba(239, 68, 68, 1)',
+    color: 'var(--destructive)',
     marginBottom: '1rem',
     display: 'flex',
     justifyContent: 'space-between',
@@ -621,7 +620,7 @@ const styles: Record<string, React.CSSProperties> = {
   dismissError: {
     background: 'none',
     border: 'none',
-    color: 'rgba(239, 68, 68, 1)',
+    color: 'var(--destructive)',
     fontSize: '1.25rem',
     cursor: 'pointer',
     padding: 0,
@@ -637,7 +636,7 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     gap: '0.75rem',
     padding: '1rem',
-    borderRadius: '0.5rem',
+    borderRadius: 'var(--radius)',
     transition: 'background-color 0.15s',
   },
   checkbox: {
@@ -653,7 +652,7 @@ const styles: Record<string, React.CSSProperties> = {
     transition: 'all 0.2s',
   },
   checkmark: {
-    color: 'white',
+    color: 'var(--primary-foreground)',
     fontSize: '0.875rem',
     fontWeight: 'bold',
   },
@@ -670,7 +669,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   todoDate: {
     fontSize: '0.75rem',
-    color: 'var(--text-secondary)',
+    color: 'var(--muted-foreground)',
   },
   deleteButton: {
     background: 'none',
@@ -685,13 +684,13 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: 'column',
     alignItems: 'center',
     padding: '3rem',
-    color: 'var(--text-secondary)',
+    color: 'var(--muted-foreground)',
   },
   spinner: {
     width: '32px',
     height: '32px',
-    border: '3px solid var(--skeleton-bg)',
-    borderTopColor: 'var(--accent)',
+    border: '3px solid var(--muted)',
+    borderTopColor: 'var(--primary)',
     borderRadius: '50%',
     animation: 'spin 0.8s linear infinite',
     marginBottom: '1rem',
@@ -701,23 +700,23 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '3rem 1rem',
   },
   emptyTitle: {
-    color: 'var(--text-primary)',
+    color: 'var(--foreground)',
     fontSize: '1.125rem',
     fontWeight: 600,
     marginBottom: '0.5rem',
   },
   emptySubtitle: {
-    color: 'var(--text-secondary)',
+    color: 'var(--muted-foreground)',
     fontSize: '0.875rem',
   },
   tipsCard: {
-    backgroundColor: 'var(--bg-secondary)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '0.75rem',
+    backgroundColor: 'var(--card)',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--radius)',
     padding: '1.25rem',
   },
   tipsTitle: {
-    color: 'var(--text-primary)',
+    color: 'var(--card-foreground)',
     fontSize: '1rem',
     fontWeight: 600,
     margin: 0,
@@ -726,7 +725,7 @@ const styles: Record<string, React.CSSProperties> = {
   tipsList: {
     margin: 0,
     paddingLeft: '1.25rem',
-    color: 'var(--text-secondary)',
+    color: 'var(--muted-foreground)',
     fontSize: '0.875rem',
     lineHeight: 1.8,
   },
@@ -734,14 +733,14 @@ const styles: Record<string, React.CSSProperties> = {
     width: 48,
     height: 48,
     borderRadius: '50%',
-    backgroundColor: 'var(--skeleton-bg)',
+    backgroundColor: 'var(--muted)',
   },
   skeletonText: {
-    backgroundColor: 'var(--skeleton-bg)',
+    backgroundColor: 'var(--muted)',
     borderRadius: '0.25rem',
   },
   skeletonCard: {
     height: '100px',
-    backgroundColor: 'var(--skeleton-bg)',
+    backgroundColor: 'var(--muted)',
   },
 };

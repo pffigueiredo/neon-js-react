@@ -5,6 +5,7 @@ import {
   AuthLoading,
 } from '@neondatabase/neon-auth-ui';
 import { Link } from 'react-router-dom';
+import { ThemeToggle } from './ThemeToggle';
 
 export function Header() {
   return (
@@ -32,6 +33,9 @@ export function Header() {
 
       {/* Auth Section */}
       <div style={styles.authSection}>
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
         {/* Loading State */}
         <AuthLoading>
           <div style={styles.skeleton} />
@@ -62,21 +66,22 @@ const styles: Record<string, React.CSSProperties> = {
     top: 0,
     zIndex: 50,
     width: '100%',
-    borderBottom: '1px solid rgba(255,255,255,0.1)',
-    backgroundColor: 'rgba(24, 24, 27, 0.9)',
+    borderBottom: '1px solid var(--border-color)',
+    backgroundColor: 'var(--bg-secondary)',
     backdropFilter: 'blur(12px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '0 1.5rem',
     height: '64px',
+    transition: 'background-color 0.3s ease, border-color 0.3s ease',
   },
   brand: {
     display: 'flex',
     alignItems: 'center',
     gap: '0.5rem',
     textDecoration: 'none',
-    color: 'white',
+    color: 'var(--text-primary)',
   },
   logo: {
     fontSize: '1.5rem',
@@ -91,7 +96,7 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '1.5rem',
   },
   navLink: {
-    color: 'rgba(161, 161, 170, 1)',
+    color: 'var(--text-secondary)',
     textDecoration: 'none',
     fontSize: '0.875rem',
     transition: 'color 0.2s',
@@ -105,11 +110,11 @@ const styles: Record<string, React.CSSProperties> = {
     height: '36px',
     width: '36px',
     borderRadius: '50%',
-    backgroundColor: 'rgba(63, 63, 70, 1)',
+    backgroundColor: 'var(--skeleton-bg)',
     animation: 'pulse 2s infinite',
   },
   primaryButton: {
-    backgroundColor: 'rgba(16, 185, 129, 1)',
+    backgroundColor: 'var(--accent)',
     color: 'white',
     padding: '0.5rem 1rem',
     borderRadius: '0.5rem',

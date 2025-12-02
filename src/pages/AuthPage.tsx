@@ -9,10 +9,7 @@ export default function AuthPage() {
 
   return (
     <main style={styles.main}>
-      <AuthView
-        pathname={pathname}
-        callbackURL={`${window.location.origin}/dashboard`}
-      />
+      <AuthView pathname={pathname} />
 
       {/* Additional info below auth card */}
       {!isMinimalView && (

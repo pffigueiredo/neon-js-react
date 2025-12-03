@@ -66,7 +66,7 @@ export function Header() {
         <div style={styles.authSection}>
           {/* GitHub Link */}
           <a
-            href="https://github.com/neondatabase/neon-js-react"
+            href="https://github.com/pffigueiredo/neon-js-react"
             target="_blank"
             rel="noopener noreferrer"
             style={styles.iconButton}
@@ -246,7 +246,7 @@ export function Header() {
 
           {/* GitHub Link */}
           <a
-            href="https://github.com/neondatabase/neon-js-react"
+            href="https://github.com/pffigueiredo/neon-js-react"
             target="_blank"
             rel="noopener noreferrer"
             style={styles.mobileGithubLink}

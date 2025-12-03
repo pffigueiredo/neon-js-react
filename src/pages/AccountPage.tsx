@@ -6,9 +6,7 @@ import {
   AccountSettingsCards,
   SecuritySettingsCards,
   SessionsCard,
-  PasskeysCard,
-  TwoFactorCard,
-  DeleteAccountCard,
+  ChangePasswordCard,
 } from '@neondatabase/neon-auth-ui';
 
 type AccountView = 'settings' | 'security' | 'sessions';
@@ -99,43 +97,22 @@ function SettingsView() {
 function SecurityView() {
   return (
     <div style={styles.section}>
+      {/* Change Password */}
+      <div style={styles.sectionCard}>
+        <h2 style={styles.sectionTitle}>🔐 Change Password</h2>
+        <p style={styles.sectionDesc}>
+          Update your password to keep your account secure.
+        </p>
+        <ChangePasswordCard />
+      </div>
+
       {/* Security Settings */}
       <div style={styles.sectionCard}>
         <h2 style={styles.sectionTitle}>Security Settings</h2>
         <p style={styles.sectionDesc}>
-          Manage your password, two-factor authentication, and other security
-          settings.
+          Manage linked accounts and other security settings.
         </p>
         <SecuritySettingsCards />
-      </div>
-
-      {/* Two-Factor Authentication */}
-      <div style={styles.sectionCard}>
-        <h2 style={styles.sectionTitle}>🛡️ Two-Factor Authentication</h2>
-        <p style={styles.sectionDesc}>
-          Add an extra layer of security to your account with 2FA.
-        </p>
-        <TwoFactorCard />
-      </div>
-
-      {/* Passkeys */}
-      <div style={styles.sectionCard}>
-        <h2 style={styles.sectionTitle}>🔑 Passkeys</h2>
-        <p style={styles.sectionDesc}>
-          Use biometrics or security keys for passwordless authentication.
-        </p>
-        <PasskeysCard />
-      </div>
-
-      {/* Delete Account */}
-      <div style={{ ...styles.sectionCard, ...styles.dangerCard }}>
-        <h2 style={{ ...styles.sectionTitle, color: '#f87171' }}>
-          ⚠️ Danger Zone
-        </h2>
-        <p style={styles.sectionDesc}>
-          Permanently delete your account and all associated data.
-        </p>
-        <DeleteAccountCard />
       </div>
     </div>
   );
@@ -250,9 +227,5 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '0.875rem',
     margin: 0,
     marginBottom: '1.5rem',
-  },
-  dangerCard: {
-    borderColor: 'color-mix(in oklch, var(--destructive) 50%, transparent)',
-    backgroundColor: 'color-mix(in oklch, var(--destructive) 10%, transparent)',
   },
 };

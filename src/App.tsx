@@ -18,6 +18,11 @@ const AccountPage = lazy(() =>
   }))
 );
 const AuthPage = lazy(() => import('./pages/AuthPage'));
+const AnonymousTestPage = lazy(() =>
+  import('./pages/AnonymousTestPage').then((module) => ({
+    default: module.AnonymousTestPage,
+  }))
+);
 
 // Loading fallback component
 function PageLoadingFallback() {
@@ -68,6 +73,9 @@ export default function App() {
           {/* Account settings */}
           <Route path="/account" element={<AccountPage />} />
           <Route path="/account/:view" element={<AccountPage />} />
+
+          {/* Anonymous sign-in test */}
+          <Route path="/anonymous" element={<AnonymousTestPage />} />
         </Routes>
       </Suspense>
     </>

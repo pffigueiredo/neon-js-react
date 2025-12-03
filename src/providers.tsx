@@ -29,7 +29,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
         providers: ['github', 'google'], // Remove: discord, apple, microsoft
       }}
       magicLink={false}
-      passkey={false}
       multiSession={false}
       Link={Link}
       // Avatar configuration with base64 storage (no server needed)
@@ -76,27 +75,23 @@ export function Providers({ children }: { children: React.ReactNode }) {
         SIGN_IN_DESCRIPTION: 'Sign in to your account to continue',
         SIGN_UP: 'Create Account',
         SIGN_UP_DESCRIPTION: 'Join us today and get started',
-        MAGIC_LINK: 'Passwordless Sign In',
-        MAGIC_LINK_DESCRIPTION: "We'll send you a magic link to sign in",
         FORGOT_PASSWORD: 'Forgot Password?',
         FORGOT_PASSWORD_DESCRIPTION: 'Enter your email to reset your password',
-        TWO_FACTOR: 'Two-Factor Authentication',
-        TWO_FACTOR_DESCRIPTION: 'Enter your verification code',
+        RESET_PASSWORD: 'Reset Password',
+        RESET_PASSWORD_DESCRIPTION: 'Enter your new password below',
+        CHANGE_PASSWORD: 'Change Password',
+        CHANGE_PASSWORD_DESCRIPTION:
+          'Enter your current password and a new password',
+        CHANGE_PASSWORD_SUCCESS: 'Your password has been changed successfully',
         OR_CONTINUE_WITH: 'or continue with',
         SETTINGS: 'Account Settings',
         SECURITY: 'Security Settings',
-        PASSKEYS: 'Passkeys',
         SESSIONS: 'Active Sessions',
-        DELETE_ACCOUNT: 'Delete Account',
-        DELETE_ACCOUNT_DESCRIPTION:
-          'Permanently delete your account and all data',
       }}
-      // Enable delete account functionality
-      deleteUser
-      // Enable email change
-      changeEmail
-      // Enable credentials (email/password)
-      credentials
+      // Enable credentials (email/password) with forgot password support
+      credentials={{
+        forgotPassword: true,
+      }}
     >
       {children}
     </NeonAuthUIProvider>

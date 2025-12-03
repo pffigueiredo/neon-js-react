@@ -1,11 +1,10 @@
 import { createClient } from '@neondatabase/neon-js';
-import { type Database } from '../database.types';
 
-export const neonClient = createClient<Database>({
+export const neonClient = createClient({
   auth: {
-    url: 'https://ep-broad-wave-ah1vzqk8.neonauth.c-3.us-east-1.aws.neon.tech/neondb/auth',
+    url: 'https://ep-autumn-waterfall-w20v4aq3.neonauth.us-east-2.aws.neon.build/neondb/auth',
   },
   dataApi: {
-    url: 'https://ep-broad-wave-ah1vzqk8.apirest.c-3.us-east-1.aws.neon.tech/neondb/rest/v1',
+    url: 'https://ep-autumn-waterfall-w20v4aq3.apirest.us-east-2.aws.neon.build/neondb/rest/v1',
   },
 });

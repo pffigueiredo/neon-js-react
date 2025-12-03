@@ -20,8 +20,7 @@ export function HomePage() {
         </h1>
         <p style={styles.subtitle}>
           A comprehensive demonstration of all client-side authentication
-          features. Explore social logins, magic links, passkeys, two-factor
-          auth, and more.
+          features. Explore social logins, magic links, and more.
         </p>
 
         {/* Dynamic content based on auth state */}
@@ -66,21 +65,15 @@ export function HomePage() {
             link="/auth/sign-in"
           />
           <FeatureCard
-            icon="✨"
-            title="Magic Link"
-            description="Passwordless authentication via email magic links."
-            link="/auth/magic-link"
+            icon="🔄"
+            title="Reset Password"
+            description="Securely reset your password via email verification link."
+            link="/auth/forgot-password"
           />
           <FeatureCard
-            icon="🔑"
-            title="Passkeys"
-            description="Modern WebAuthn/FIDO2 authentication with biometrics."
-            link="/auth/sign-in"
-          />
-          <FeatureCard
-            icon="🛡️"
-            title="Two-Factor Auth"
-            description="OTP and TOTP based two-factor authentication."
+            icon="🔐"
+            title="Change Password"
+            description="Update your password from account security settings."
             link="/account/security"
           />
           <FeatureCard
@@ -88,6 +81,12 @@ export function HomePage() {
             title="User Settings"
             description="Comprehensive account management and profile settings."
             link="/account/settings"
+          />
+          <FeatureCard
+            icon="👻"
+            title="Anonymous Sign In"
+            description="Try the app without creating an account. We support anonymous sign-in!"
+            link="/anonymous"
           />
         </div>
       </section>
@@ -102,12 +101,12 @@ export function HomePage() {
         <div style={styles.flowButtons}>
           <AuthFlowButton to="/auth/sign-in" label="Sign In" emoji="👋" />
           <AuthFlowButton to="/auth/sign-up" label="Sign Up" emoji="🚀" />
-          <AuthFlowButton to="/auth/magic-link" label="Magic Link" emoji="✨" />
           <AuthFlowButton
             to="/auth/forgot-password"
             label="Forgot Password"
             emoji="🔑"
           />
+          <AuthFlowButton to="/anonymous" label="Anonymous" emoji="👻" />
         </div>
       </section>
     </div>

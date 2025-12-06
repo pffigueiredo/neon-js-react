@@ -5,7 +5,7 @@ This is a simple example of how to use Neon-js with React.
 ## Covered features
 
 - [x] Authentication
-  - done through `neon-js` with `neon-auth-ui` for components
+  - done through `neon-js` with `auth-ui` for components
 - [x] Authorization
   - done through RLS (Row Level Security), by applying the policies in the migration
 - [x] Data fetching/mutating

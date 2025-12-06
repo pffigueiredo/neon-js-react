@@ -1,8 +1,8 @@
-import { NeonAuthUIProvider } from '@neondatabase/neon-auth-ui';
+import { NeonAuthUIProvider } from '@neondatabase/neon-js/auth/react';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import { neonClient } from './client';
-import '@neondatabase/neon-auth-ui/css';
+import '@neondatabase/neon-js/auth/react/ui/css';
 import type { ReactNode } from 'react';
 
 const Link = ({

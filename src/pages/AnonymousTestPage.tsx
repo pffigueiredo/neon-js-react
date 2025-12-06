@@ -6,7 +6,7 @@ import {
   SignedIn,
   SignedOut,
   UserAvatar,
-} from '@neondatabase/neon-auth-ui';
+} from '@neondatabase/neon-js/auth/react';
 
 export function AnonymousTestPage() {
   const [isLoading, setIsLoading] = useState(false);

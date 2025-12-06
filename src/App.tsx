@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
-import '@neondatabase/neon-auth-ui/css';
 
 // Lazy load pages for code splitting
 const HomePage = lazy(() =>

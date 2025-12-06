@@ -3,10 +3,10 @@ import {
   SignedIn,
   AuthLoading,
   UserAvatar,
-} from '@neondatabase/neon-auth-ui';
+} from '@neondatabase/neon-js/auth/react';
 import { Link } from 'react-router-dom';
 import { useContext, useState, useEffect, useCallback } from 'react';
-import { AuthUIContext } from '@neondatabase/neon-auth-ui';
+import { AuthUIContext } from '@neondatabase/neon-js/auth/react';
 import { neonClient } from '../client';
 import type { Tables } from '../../database.types';
 
@@ -325,22 +325,22 @@ function DashboardContent() {
                 {filter === 'completed'
                   ? '🎉'
                   : filter === 'active'
-                    ? '✨'
-                    : '📋'}
+                  ? '✨'
+                  : '📋'}
               </span>
               <p style={styles.emptyTitle}>
                 {filter === 'completed'
                   ? 'No completed tasks yet'
                   : filter === 'active'
-                    ? 'All tasks completed!'
-                    : 'No tasks yet'}
+                  ? 'All tasks completed!'
+                  : 'No tasks yet'}
               </p>
               <p style={styles.emptySubtitle}>
                 {filter === 'completed'
                   ? 'Complete some tasks to see them here'
                   : filter === 'active'
-                    ? 'Time to add more tasks'
-                    : 'Add a task above to get started'}
+                  ? 'Time to add more tasks'
+                  : 'Add a task above to get started'}
               </p>
             </div>
           ) : (

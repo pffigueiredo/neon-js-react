@@ -10,8 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@neondatabase/neon-js": "0.1.0-alpha.11",
-    "@neondatabase/neon-auth-ui": "latest",
+    "@neondatabase/neon-js": "0.1.0-beta.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.6"

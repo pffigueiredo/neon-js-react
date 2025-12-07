@@ -2,7 +2,7 @@ import { NeonAuthUIProvider } from '@neondatabase/neon-js/auth/react';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import { neonClient } from './client';
-import '@neondatabase/neon-js/auth/react/ui/css';
+import '@neondatabase/auth/ui/css';
 import type { ReactNode } from 'react';
 
 const Link = ({
@@ -35,31 +35,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
       avatar={{
         size: 256,
         extension: 'webp',
-      }}
-      // Additional custom fields for sign-up and settings
-      additionalFields={{
-        company: {
-          label: 'Company',
-          placeholder: 'Your company name',
-          description: 'Where do you work?',
-          required: false,
-          type: 'string',
-        },
-        age: {
-          label: 'Age',
-          placeholder: 'Your age',
-          description: 'Must be 18 or older',
-          instructions: 'We need this for age verification',
-          required: false,
-          type: 'number',
-          validate: (value: string) => Promise.resolve(parseInt(value) >= 18),
-        },
-        newsletter: {
-          label: 'Subscribe to newsletter',
-          description: 'Get the latest updates and news',
-          required: false,
-          type: 'boolean',
-        },
       }}
       // Configure sign-up to show additional fields
       signUp={{

@@ -4,6 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { neonClient } from './client';
 import '@neondatabase/auth/ui/css';
 import type { ReactNode } from 'react';
+import { useOrganizationSync } from './hooks/useOrganizationSync';
 
 const Link = ({
   href,
@@ -18,6 +19,11 @@ const Link = ({
     {children}
   </RouterLink>
 );
+
+function OrganizationSync({ children }: { children: ReactNode }) {
+  useOrganizationSync();
+  return <>{children}</>;
+}
 export function Providers({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
@@ -68,7 +74,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         forgotPassword: true,
       }}
     >
-      {children}
+      <OrganizationSync>{children}</OrganizationSync>
     </NeonAuthUIProvider>
   );
 }

@@ -7,7 +7,6 @@ import {
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthUIContext } from '@neondatabase/neon-js/auth/react';
-import { useOrganization } from '../hooks/useOrganization';
 
 export function HomePage() {
   return (
@@ -117,7 +116,6 @@ export function HomePage() {
 function WelcomeBackSection() {
   const { hooks } = useContext(AuthUIContext);
   const { data: session } = hooks.useSession();
-  const { data: orgData, isLoading: orgLoading } = useOrganization();
 
   return (
     <div style={styles.welcomeBack}>
@@ -131,84 +129,15 @@ function WelcomeBackSection() {
         </div>
       </div>
 
-      {/* Organization Card */}
-      <div style={styles.orgCard}>
-        <div style={styles.orgHeader}>
-          <h3 style={styles.orgTitle}>🏢 Your Organization</h3>
-        </div>
-        {orgLoading ? (
-          <div style={styles.orgLoading}>
-            <div style={styles.spinner} />
-            <span>Loading organization...</span>
-          </div>
-        ) : orgData?.organization ? (
-          <div style={styles.orgContent}>
-            <div style={styles.orgInfo}>
-              {orgData.organization.logo ? (
-                <img
-                  src={orgData.organization.logo}
-                  alt={orgData.organization.name}
-                  style={styles.orgLogo}
-                />
-              ) : (
-                <div style={styles.orgLogoPlaceholder}>
-                  {orgData.organization.name.charAt(0).toUpperCase()}
-                </div>
-              )}
-              <div style={styles.orgDetails}>
-                <p style={styles.orgName}>{orgData.organization.name}</p>
-                <p style={styles.orgSlug}>@{orgData.organization.slug}</p>
-                {orgData.userRole && (
-                  <span style={styles.roleBadge}>{orgData.userRole}</span>
-                )}
-              </div>
-            </div>
-            
-            {/* Members */}
-            <div style={styles.membersSection}>
-              <span style={styles.membersTitle}>
-                {orgData.members.length} {orgData.members.length === 1 ? 'member' : 'members'}
-              </span>
-              <div style={styles.memberAvatars}>
-                {orgData.members.slice(0, 4).map((member) => (
-                  <div key={member.id} style={styles.memberAvatar} title={member.user?.name || member.user?.email}>
-                    {member.user?.image ? (
-                      <img
-                        src={member.user.image}
-                        alt={member.user.name || 'Member'}
-                        style={styles.memberAvatarImg}
-                      />
-                    ) : (
-                      <span>
-                        {(member.user?.name || member.user?.email || 'U')
-                          .charAt(0)
-                          .toUpperCase()}
-                      </span>
-                    )}
-                  </div>
-                ))}
-                {orgData.members.length > 4 && (
-                  <div style={styles.moreMembers}>
-                    +{orgData.members.length - 4}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div style={styles.noOrg}>
-            <span style={{ fontSize: '1.5rem' }}>🏗️</span>
-            <p style={styles.noOrgText}>Setting up your organization...</p>
-          </div>
-        )}
-      </div>
-
       <div style={styles.buttonGroup}>
         <Link to="/dashboard" style={styles.primaryButton}>
           Go to Dashboard
         </Link>
         <Link to="/account/settings" style={styles.secondaryButton}>
           Account Settings
+        </Link>
+        <Link to="/organization" style={styles.secondaryButton}>
+          Organization
         </Link>
       </div>
     </div>
@@ -410,171 +339,5 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 'var(--radius)',
     textDecoration: 'none',
     fontWeight: 500,
-  },
-  // Organization card styles
-  orgCard: {
-    backgroundColor: 'var(--card)',
-    border: '1px solid var(--border)',
-    borderRadius: '1rem',
-    padding: '1.25rem',
-    width: '100%',
-    maxWidth: '360px',
-    textAlign: 'left',
-  },
-  orgHeader: {
-    marginBottom: '1rem',
-    textAlign: 'left',
-  },
-  orgTitle: {
-    color: 'var(--card-foreground)',
-    fontSize: '0.875rem',
-    fontWeight: 600,
-    margin: 0,
-  },
-  orgLoading: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '0.5rem',
-    color: 'var(--muted-foreground)',
-    padding: '0.5rem 0',
-    fontSize: '0.875rem',
-  },
-  spinner: {
-    width: '16px',
-    height: '16px',
-    border: '2px solid var(--muted)',
-    borderTopColor: 'var(--primary)',
-    borderRadius: '50%',
-    animation: 'spin 0.8s linear infinite',
-  },
-  orgContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
-  },
-  orgInfo: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: '1rem',
-  },
-  orgLogo: {
-    width: '44px',
-    height: '44px',
-    borderRadius: '10px',
-    objectFit: 'cover',
-    flexShrink: 0,
-  },
-  orgLogoPlaceholder: {
-    width: '44px',
-    height: '44px',
-    borderRadius: '10px',
-    backgroundColor: 'var(--foreground)',
-    color: 'var(--background)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '1.125rem',
-    fontWeight: 'bold',
-    flexShrink: 0,
-  },
-  orgDetails: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.25rem',
-    flex: 1,
-    minWidth: 0,
-  },
-  orgName: {
-    color: 'var(--card-foreground)',
-    fontSize: '0.9375rem',
-    fontWeight: 600,
-    margin: 0,
-    lineHeight: 1.3,
-  },
-  orgSlug: {
-    color: 'var(--muted-foreground)',
-    fontSize: '0.75rem',
-    margin: 0,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
-  roleBadge: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
-    color: 'var(--primary)',
-    fontSize: '0.6875rem',
-    fontWeight: 500,
-    padding: '0.1875rem 0.5rem',
-    borderRadius: '0.25rem',
-    textTransform: 'capitalize',
-    marginTop: '0.25rem',
-    width: 'fit-content',
-  },
-  membersSection: {
-    borderTop: '1px solid var(--border)',
-    paddingTop: '0.875rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  membersTitle: {
-    color: 'var(--muted-foreground)',
-    fontSize: '0.6875rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    margin: 0,
-  },
-  memberAvatars: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: '4px',
-  },
-  memberAvatar: {
-    width: '26px',
-    height: '26px',
-    borderRadius: '50%',
-    backgroundColor: 'var(--muted)',
-    color: 'var(--muted-foreground)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '0.6875rem',
-    fontWeight: 500,
-    overflow: 'hidden',
-    border: '2px solid var(--card)',
-    marginLeft: '-8px',
-  },
-  memberAvatarImg: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-  moreMembers: {
-    width: '26px',
-    height: '26px',
-    borderRadius: '50%',
-    backgroundColor: 'var(--muted)',
-    color: 'var(--muted-foreground)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '0.625rem',
-    fontWeight: 600,
-    marginLeft: '-8px',
-    border: '2px solid var(--card)',
-  },
-  noOrg: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    padding: '0.5rem 0',
-  },
-  noOrgText: {
-    color: 'var(--muted-foreground)',
-    fontSize: '0.875rem',
-    margin: 0,
   },
 };

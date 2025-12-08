@@ -16,6 +16,11 @@ const AccountPage = lazy(() =>
     default: module.AccountPage,
   }))
 );
+const OrganizationPage = lazy(() =>
+  import('./pages/OrganizationPage').then((module) => ({
+    default: module.OrganizationPage,
+  }))
+);
 const AuthPage = lazy(() => import('./pages/AuthPage'));
 const AnonymousTestPage = lazy(() =>
   import('./pages/AnonymousTestPage').then((module) => ({
@@ -72,6 +77,9 @@ export default function App() {
           {/* Account settings */}
           <Route path="/account" element={<AccountPage />} />
           <Route path="/account/:view" element={<AccountPage />} />
+
+          {/* Organization settings */}
+          <Route path="/organization" element={<OrganizationPage />} />
 
           {/* Anonymous sign-in test */}
           <Route path="/anonymous" element={<AnonymousTestPage />} />

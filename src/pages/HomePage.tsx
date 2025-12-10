@@ -136,6 +136,9 @@ function WelcomeBackSection() {
         <Link to="/account/settings" style={styles.secondaryButton}>
           Account Settings
         </Link>
+        <Link to="/organization" style={styles.secondaryButton}>
+          Organization
+        </Link>
       </div>
     </div>
   );

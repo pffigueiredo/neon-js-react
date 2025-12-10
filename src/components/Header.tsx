@@ -59,6 +59,15 @@ export function Header() {
             >
               Settings
             </NavLink>
+            <NavLink
+              to="/organization"
+              style={({ isActive }) => ({
+                ...styles.navLink,
+                ...(isActive ? styles.navLinkActive : {}),
+              })}
+            >
+              Organization
+            </NavLink>
           </SignedIn>
         </nav>
 
@@ -207,6 +216,16 @@ export function Header() {
               })}
             >
               Settings
+            </NavLink>
+            <NavLink
+              to="/organization"
+              onClick={closeMobileMenu}
+              style={({ isActive }) => ({
+                ...styles.mobileNavLink,
+                ...(isActive ? styles.mobileNavLinkActive : {}),
+              })}
+            >
+              Organization
             </NavLink>
           </SignedIn>
           <NavLink

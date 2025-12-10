@@ -1,9 +1,4 @@
-import {
-  RedirectToSignIn,
-  SignedIn,
-  AuthLoading,
-  UserAvatar,
-} from '@neondatabase/neon-js/auth/react';
+import { AuthLoading, UserAvatar } from '@neondatabase/neon-js/auth/react';
 import { Link } from 'react-router-dom';
 import { useContext, useState, useEffect, useCallback } from 'react';
 import { AuthUIContext } from '@neondatabase/neon-js/auth/react';
@@ -16,18 +11,13 @@ type FilterType = 'all' | 'active' | 'completed';
 export function DashboardPage() {
   return (
     <>
-      {/* Page protection disabled for testing */}
-      {/* <RedirectToSignIn /> */}
-
       {/* Loading state */}
       <AuthLoading>
         <DashboardSkeleton />
       </AuthLoading>
 
       {/* Dashboard content - protection disabled for testing */}
-      {/* <SignedIn> */}
       <DashboardContent />
-      {/* </SignedIn> */}
     </>
   );
 }

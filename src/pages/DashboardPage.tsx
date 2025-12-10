@@ -16,18 +16,18 @@ type FilterType = 'all' | 'active' | 'completed';
 export function DashboardPage() {
   return (
     <>
-      {/* Redirect to sign-in if not authenticated */}
-      <RedirectToSignIn />
+      {/* Page protection disabled for testing */}
+      {/* <RedirectToSignIn /> */}
 
       {/* Loading state */}
       <AuthLoading>
         <DashboardSkeleton />
       </AuthLoading>
 
-      {/* Dashboard content - only visible when signed in */}
-      <SignedIn>
-        <DashboardContent />
-      </SignedIn>
+      {/* Dashboard content - protection disabled for testing */}
+      {/* <SignedIn> */}
+      <DashboardContent />
+      {/* </SignedIn> */}
     </>
   );
 }
@@ -45,19 +45,31 @@ function DashboardContent() {
 
   const userId = session?.user?.id;
 
+  // Check if user is anonymous or not signed in
+  const isAnonymous: boolean =
+    session?.user && 'isAnonymous' in session.user
+      ? Boolean(session?.user?.isAnonymous)
+      : false;
+  const isAuthenticated = Boolean(userId) && !isAnonymous;
+  const isReadOnly = !isAuthenticated;
+
   // Fetch todos
   const fetchTodos = useCallback(async () => {
-    if (!userId) return;
-
     setIsLoading(true);
     setError(null);
 
     try {
-      const { data, error: fetchError } = await neonClient
+      let query = neonClient
         .from('todos')
         .select('*')
-        .eq('user_id', userId)
         .order('created_at', { ascending: false });
+
+      // If user is not authenticated, only show public todos
+      if (!isAuthenticated) {
+        query = query.eq('is_public', true);
+      }
+
+      const { data, error: fetchError } = await query;
 
       if (fetchError) throw fetchError;
       setTodos(data || []);
@@ -67,7 +79,7 @@ function DashboardContent() {
     } finally {
       setIsLoading(false);
     }
-  }, [userId]);
+  }, [userId, isAuthenticated]);
 
   useEffect(() => {
     fetchTodos();
@@ -157,6 +169,36 @@ function DashboardContent() {
     }
   };
 
+  // Toggle todo public status
+  const togglePublic = async (todo: Todo) => {
+    setError(null);
+
+    // Optimistic update
+    setTodos((prev) =>
+      prev.map((t) =>
+        t.id === todo.id ? { ...t, is_public: !t.is_public } : t
+      )
+    );
+
+    try {
+      const { error: updateError } = await neonClient
+        .from('todos')
+        .update({ is_public: !todo.is_public })
+        .eq('id', todo.id);
+
+      if (updateError) throw updateError;
+    } catch (err) {
+      // Revert on error
+      setTodos((prev) =>
+        prev.map((t) =>
+          t.id === todo.id ? { ...t, is_public: todo.is_public } : t
+        )
+      );
+      setError('Failed to update todo visibility');
+      console.error('Error updating todo visibility:', err);
+    }
+  };
+
   // Clear completed todos
   const clearCompleted = async () => {
     const completedIds = todos.filter((t) => t.completed).map((t) => t.id);
@@ -192,20 +234,57 @@ function DashboardContent() {
 
   return (
     <div style={styles.container}>
+      {/* Guest Banner */}
+      {isReadOnly && (
+        <div style={styles.guestBanner}>
+          <span style={{ fontSize: '1.25rem' }}>👀</span>
+          <div style={{ flex: 1 }}>
+            <p style={styles.guestBannerTitle}>Viewing Public Tasks</p>
+            <p style={styles.guestBannerText}>
+              Sign in or create an account to manage your own tasks.
+            </p>
+          </div>
+          <Link to="/auth/sign-in" style={styles.guestSignInButton}>
+            Sign In
+          </Link>
+        </div>
+      )}
+
       {/* Header */}
       <div style={styles.header}>
         <div style={styles.userInfo}>
-          <UserAvatar user={session?.user} style={{ width: 48, height: 48 }} />
-          <div>
-            <h1 style={styles.welcomeTitle}>
-              {session?.user?.name || 'User'}'s Tasks
-            </h1>
-            <p style={styles.email}>{session?.user?.email}</p>
-          </div>
+          {isAuthenticated ? (
+            <>
+              <UserAvatar
+                user={session?.user}
+                style={{ width: 48, height: 48 }}
+              />
+              <div>
+                <h1 style={styles.welcomeTitle}>
+                  {session?.user?.name || 'User'}'s Tasks
+                </h1>
+                <p style={styles.email}>{session?.user?.email}</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <span style={{ fontSize: '2.5rem' }}>🌐</span>
+              <div>
+                <h1 style={styles.welcomeTitle}>Public Tasks</h1>
+                <p style={styles.email}>
+                  {isAnonymous
+                    ? 'Browsing as guest'
+                    : 'Browse public tasks from our community'}
+                </p>
+              </div>
+            </>
+          )}
         </div>
-        <Link to="/account/settings" style={styles.settingsButton}>
-          ⚙️ Settings
-        </Link>
+        {isAuthenticated && (
+          <Link to="/account/settings" style={styles.settingsButton}>
+            ⚙️ Settings
+          </Link>
+        )}
       </div>
 
       {/* Stats Cards */}
@@ -236,37 +315,41 @@ function DashboardContent() {
       {/* Main Todo Card */}
       <div style={styles.todoCard}>
         <div style={styles.todoHeader}>
-          <h2 style={styles.todoTitle}>📝 My Tasks</h2>
-          {completedTodosCount > 0 && (
+          <h2 style={styles.todoTitle}>
+            {isReadOnly ? '🌐 Public Tasks' : '📝 My Tasks'}
+          </h2>
+          {!isReadOnly && completedTodosCount > 0 && (
             <button onClick={clearCompleted} style={styles.clearButton}>
               Clear completed ({completedTodosCount})
             </button>
           )}
         </div>
 
-        {/* Add Todo Form */}
-        <form onSubmit={addTodo} style={styles.addForm}>
-          <input
-            type="text"
-            value={newTodoTitle}
-            onChange={(e) => setNewTodoTitle(e.target.value)}
-            placeholder="What needs to be done?"
-            style={styles.addInput}
-            disabled={isAdding}
-          />
-          <button
-            type="submit"
-            disabled={!newTodoTitle.trim() || isAdding}
-            style={{
-              ...styles.addButton,
-              opacity: !newTodoTitle.trim() || isAdding ? 0.5 : 1,
-              cursor:
-                !newTodoTitle.trim() || isAdding ? 'not-allowed' : 'pointer',
-            }}
-          >
-            {isAdding ? '...' : '+ Add'}
-          </button>
-        </form>
+        {/* Add Todo Form - Only for authenticated users */}
+        {!isReadOnly && (
+          <form onSubmit={addTodo} style={styles.addForm}>
+            <input
+              type="text"
+              value={newTodoTitle}
+              onChange={(e) => setNewTodoTitle(e.target.value)}
+              placeholder="What needs to be done?"
+              style={styles.addInput}
+              disabled={isAdding}
+            />
+            <button
+              type="submit"
+              disabled={!newTodoTitle.trim() || isAdding}
+              style={{
+                ...styles.addButton,
+                opacity: !newTodoTitle.trim() || isAdding ? 0.5 : 1,
+                cursor:
+                  !newTodoTitle.trim() || isAdding ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {isAdding ? '...' : '+ Add'}
+            </button>
+          </form>
+        )}
 
         {/* Filter Tabs */}
         <div style={styles.filterTabs}>
@@ -322,25 +405,31 @@ function DashboardContent() {
                   display: 'block',
                 }}
               >
-                {filter === 'completed'
-                  ? '🎉'
-                  : filter === 'active'
-                  ? '✨'
-                  : '📋'}
+                {isReadOnly
+                  ? '🔍'
+                  : filter === 'completed'
+                    ? '🎉'
+                    : filter === 'active'
+                      ? '✨'
+                      : '📋'}
               </span>
               <p style={styles.emptyTitle}>
-                {filter === 'completed'
-                  ? 'No completed tasks yet'
-                  : filter === 'active'
-                  ? 'All tasks completed!'
-                  : 'No tasks yet'}
+                {isReadOnly
+                  ? 'No public tasks available'
+                  : filter === 'completed'
+                    ? 'No completed tasks yet'
+                    : filter === 'active'
+                      ? 'All tasks completed!'
+                      : 'No tasks yet'}
               </p>
               <p style={styles.emptySubtitle}>
-                {filter === 'completed'
-                  ? 'Complete some tasks to see them here'
-                  : filter === 'active'
-                  ? 'Time to add more tasks'
-                  : 'Add a task above to get started'}
+                {isReadOnly
+                  ? 'Sign in to create your own tasks'
+                  : filter === 'completed'
+                    ? 'Complete some tasks to see them here'
+                    : filter === 'active'
+                      ? 'Time to add more tasks'
+                      : 'Add a task above to get started'}
               </p>
             </div>
           ) : (
@@ -349,7 +438,9 @@ function DashboardContent() {
                 key={todo.id}
                 todo={todo}
                 onToggle={toggleTodo}
+                onTogglePublic={togglePublic}
                 onDelete={deleteTodo}
+                isReadOnly={isReadOnly}
               />
             ))
           )}
@@ -362,6 +453,7 @@ function DashboardContent() {
         <ul style={styles.tipsList}>
           <li>Click the checkbox to mark a task as complete</li>
           <li>Use filters to focus on active or completed tasks</li>
+          <li>Click 🔒/🌐 to toggle public visibility for anonymous users</li>
           <li>Clear completed tasks to keep your list tidy</li>
         </ul>
       </div>
@@ -372,11 +464,15 @@ function DashboardContent() {
 function TodoItem({
   todo,
   onToggle,
+  onTogglePublic,
   onDelete,
+  isReadOnly = false,
 }: {
   todo: Todo;
   onToggle: (todo: Todo) => void;
+  onTogglePublic: (todo: Todo) => void;
   onDelete: (id: string) => void;
+  isReadOnly?: boolean;
 }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -391,16 +487,30 @@ function TodoItem({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <button
-        onClick={() => onToggle(todo)}
-        style={{
-          ...styles.checkbox,
-          backgroundColor: todo.completed ? 'var(--primary)' : 'transparent',
-          borderColor: todo.completed ? 'var(--primary)' : 'var(--border)',
-        }}
-      >
-        {todo.completed && <span style={styles.checkmark}>✓</span>}
-      </button>
+      {/* Checkbox - clickable only for authenticated users */}
+      {isReadOnly ? (
+        <div
+          style={{
+            ...styles.checkbox,
+            backgroundColor: todo.completed ? 'var(--primary)' : 'transparent',
+            borderColor: todo.completed ? 'var(--primary)' : 'var(--border)',
+            cursor: 'default',
+          }}
+        >
+          {todo.completed && <span style={styles.checkmark}>✓</span>}
+        </div>
+      ) : (
+        <button
+          onClick={() => onToggle(todo)}
+          style={{
+            ...styles.checkbox,
+            backgroundColor: todo.completed ? 'var(--primary)' : 'transparent',
+            borderColor: todo.completed ? 'var(--primary)' : 'var(--border)',
+          }}
+        >
+          {todo.completed && <span style={styles.checkmark}>✓</span>}
+        </button>
+      )}
 
       <div style={styles.todoContent}>
         <span
@@ -424,16 +534,46 @@ function TodoItem({
         </span>
       </div>
 
-      <button
-        onClick={() => onDelete(todo.id)}
-        style={{
-          ...styles.deleteButton,
-          opacity: isHovered ? 1 : 0,
-        }}
-        aria-label="Delete todo"
-      >
-        🗑️
-      </button>
+      {/* Public badge (read-only indicator for anonymous users) */}
+      {isReadOnly ? (
+        <span style={styles.publicBadge} title="This is a public task">
+          🌐
+        </span>
+      ) : (
+        <>
+          <button
+            onClick={() => onTogglePublic(todo)}
+            style={{
+              ...styles.publicButton,
+              backgroundColor: todo.is_public
+                ? 'color-mix(in oklch, var(--primary) 20%, transparent)'
+                : 'transparent',
+              borderColor: todo.is_public ? 'var(--primary)' : 'var(--border)',
+              color: todo.is_public
+                ? 'var(--primary)'
+                : 'var(--muted-foreground)',
+            }}
+            title={
+              todo.is_public
+                ? 'Public - click to make private'
+                : 'Private - click to make public'
+            }
+          >
+            {todo.is_public ? '🌐' : '🔒'}
+          </button>
+
+          <button
+            onClick={() => onDelete(todo.id)}
+            style={{
+              ...styles.deleteButton,
+              opacity: isHovered ? 1 : 0,
+            }}
+            aria-label="Delete todo"
+          >
+            🗑️
+          </button>
+        </>
+      )}
     </div>
   );
 }
@@ -471,6 +611,37 @@ const styles: Record<string, React.CSSProperties> = {
     maxWidth: '800px',
     margin: '0 auto',
     padding: '2rem 1.5rem',
+  },
+  guestBanner: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem',
+    padding: '1rem 1.25rem',
+    backgroundColor: 'color-mix(in oklch, var(--primary) 10%, transparent)',
+    border: '1px solid color-mix(in oklch, var(--primary) 30%, transparent)',
+    borderRadius: 'var(--radius)',
+    marginBottom: '1.5rem',
+  },
+  guestBannerTitle: {
+    color: 'var(--foreground)',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    margin: 0,
+  },
+  guestBannerText: {
+    color: 'var(--muted-foreground)',
+    fontSize: '0.75rem',
+    margin: '0.25rem 0 0',
+  },
+  guestSignInButton: {
+    backgroundColor: 'var(--primary)',
+    color: 'var(--primary-foreground)',
+    padding: '0.5rem 1rem',
+    borderRadius: 'var(--radius)',
+    textDecoration: 'none',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    whiteSpace: 'nowrap',
   },
   header: {
     display: 'flex',
@@ -678,6 +849,23 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
     padding: '0.25rem',
     transition: 'opacity 0.15s',
+  },
+  publicButton: {
+    border: '1px solid',
+    borderRadius: 'var(--radius)',
+    fontSize: '0.875rem',
+    cursor: 'pointer',
+    padding: '0.25rem 0.5rem',
+    transition: 'all 0.2s',
+    flexShrink: 0,
+  },
+  publicBadge: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '0.875rem',
+    padding: '0.25rem 0.5rem',
+    flexShrink: 0,
   },
   loadingState: {
     display: 'flex',

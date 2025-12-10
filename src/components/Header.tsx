@@ -40,16 +40,16 @@ export function Header() {
           >
             Home
           </NavLink>
+          <NavLink
+            to="/dashboard"
+            style={({ isActive }) => ({
+              ...styles.navLink,
+              ...(isActive ? styles.navLinkActive : {}),
+            })}
+          >
+            Dashboard
+          </NavLink>
           <SignedIn>
-            <NavLink
-              to="/dashboard"
-              style={({ isActive }) => ({
-                ...styles.navLink,
-                ...(isActive ? styles.navLinkActive : {}),
-              })}
-            >
-              Dashboard
-            </NavLink>
             <NavLink
               to="/account/settings"
               style={({ isActive }) => ({
@@ -187,17 +187,17 @@ export function Header() {
           >
             Home
           </NavLink>
+          <NavLink
+            to="/dashboard"
+            onClick={closeMobileMenu}
+            style={({ isActive }) => ({
+              ...styles.mobileNavLink,
+              ...(isActive ? styles.mobileNavLinkActive : {}),
+            })}
+          >
+            Dashboard
+          </NavLink>
           <SignedIn>
-            <NavLink
-              to="/dashboard"
-              onClick={closeMobileMenu}
-              style={({ isActive }) => ({
-                ...styles.mobileNavLink,
-                ...(isActive ? styles.mobileNavLinkActive : {}),
-              })}
-            >
-              Dashboard
-            </NavLink>
             <NavLink
               to="/account/settings"
               onClick={closeMobileMenu}
@@ -209,16 +209,6 @@ export function Header() {
               Settings
             </NavLink>
           </SignedIn>
-          <NavLink
-            to="/anonymous"
-            onClick={closeMobileMenu}
-            style={({ isActive }) => ({
-              ...styles.mobileNavLink,
-              ...(isActive ? styles.mobileNavLinkActive : {}),
-            })}
-          >
-            Anonymous Sign In
-          </NavLink>
         </nav>
 
         <div style={styles.mobileMenuFooter}>

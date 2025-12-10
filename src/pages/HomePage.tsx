@@ -84,9 +84,9 @@ export function HomePage() {
           />
           <FeatureCard
             icon="👻"
-            title="Anonymous Sign In"
-            description="Try the app without creating an account. We support anonymous sign-in!"
-            link="/anonymous"
+            title="Anonymous Access"
+            description="Browse the dashboard without an account. Anonymous tokens are generated automatically!"
+            link="/dashboard"
           />
         </div>
       </section>
@@ -106,7 +106,7 @@ export function HomePage() {
             label="Forgot Password"
             emoji="🔑"
           />
-          <AuthFlowButton to="/anonymous" label="Anonymous" emoji="👻" />
+          <AuthFlowButton to="/dashboard" label="Try as Guest" emoji="👻" />
         </div>
       </section>
     </div>

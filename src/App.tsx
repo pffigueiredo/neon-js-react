@@ -17,6 +17,11 @@ const AccountPage = lazy(() =>
   }))
 );
 const AuthPage = lazy(() => import('./pages/AuthPage'));
+const IframeTestPage = lazy(() =>
+  import('./pages/IframeTestPage').then((module) => ({
+    default: module.IframeTestPage,
+  }))
+);
 
 // Loading fallback component
 function PageLoadingFallback() {
@@ -57,6 +62,9 @@ export default function App() {
         <Routes>
           {/* Home */}
           <Route path="/" element={<HomePage />} />
+
+          {/* iframe SSO Test */}
+          <Route path="/iframe-test" element={<IframeTestPage />} />
 
           {/* Auth routes */}
           <Route path="/auth/:pathname" element={<AuthPage />} />

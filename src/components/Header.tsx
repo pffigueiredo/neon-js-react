@@ -49,6 +49,15 @@ export function Header() {
           >
             Dashboard
           </NavLink>
+          <NavLink
+            to="/iframe-test"
+            style={({ isActive }) => ({
+              ...styles.navLink,
+              ...(isActive ? styles.navLinkActive : {}),
+            })}
+          >
+            Iframe Test
+          </NavLink>
           <SignedIn>
             <NavLink
               to="/account/settings"
@@ -196,6 +205,16 @@ export function Header() {
             })}
           >
             Dashboard
+          </NavLink>
+          <NavLink
+            to="/iframe-test"
+            onClick={closeMobileMenu}
+            style={({ isActive }) => ({
+              ...styles.mobileNavLink,
+              ...(isActive ? styles.mobileNavLinkActive : {}),
+            })}
+          >
+            Iframe Test
           </NavLink>
           <SignedIn>
             <NavLink

@@ -30,6 +30,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       }}
       magicLink={false}
       multiSession={false}
+      redirectTo="/dashboard" // <-- Add this!
       Link={Link}
       // Avatar configuration with base64 storage (no server needed)
       avatar={{
